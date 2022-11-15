@@ -1,10 +1,14 @@
-package Entities;
+package entities;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Post {
+	
+	// apenas um cópia do sdf para a aplicação inteira. Não fica instantiando um novo sdf toda hora
+	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	
 	private Date momento;
 	private String titulo;
@@ -68,13 +72,33 @@ public class Post {
 	}
 	*/ 
 	public void adicionarComentario (Comentario comentario) {
-		comentarios.add(comentario);
+		this.comentarios.add(comentario);
 	}
 	
 	public void removerComentario (Comentario comentario) {
-		comentarios.remove(comentario);
+		this.comentarios.remove(comentario);
 	}
 	
+	// Se usa o String Builder quase a String é muito grande
+	// se usar somente concatenações vai ficar muito lento (usar muita memória) na hora de instanciar a String na tela
+	// Classe StringBuilder é muito mais otimizada
+	public String toString() {
+		
+		StringBuilder post = new StringBuilder();
+		
+		post.append("Título: " + this.titulo + "\n");
+		post.append(this.likes + " Likes\n");
+		post.append("Postado em: " + sdf.format(this.momento) + "\n");
+		post.append(this.conteudo + "\n");
+		post.append("Comentários:\n");
+		for (int i=0 ; i < comentarios.size() ; i++) {
+			post.append("\t" + comentarios.get(i).getTexto() + "\n");
+		}
+		
+		return post.toString();
+		
+		
+	}
 	
 
 }
